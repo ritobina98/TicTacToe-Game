@@ -1,6 +1,8 @@
 package tictactoeGame.services;
 
 import tictactoeGame.exceptions.DuplicateSymbolException;
+import tictactoeGame.models.Bot;
+import tictactoeGame.models.BotDifficultyLevel;
 import tictactoeGame.models.Player;
 import tictactoeGame.models.PlayerType;
 
@@ -25,6 +27,18 @@ public class PlayerService {
                 PlayerType.HUMAN
         );
     }
-
+    public Bot createBot(String name, char symbol){
+        if(symbolSet.contains(symbol)){
+            throw new DuplicateSymbolException("Duplicate symbols are not allowed");
+        }
+        symbolSet.add(symbol);
+        return new Bot(
+                counter++,
+                name,
+                symbol,
+                PlayerType.BOT,
+                BotDifficultyLevel.MEDIUM
+        );
+    }
 
 }

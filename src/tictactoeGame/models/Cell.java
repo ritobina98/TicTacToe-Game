@@ -43,4 +43,11 @@ public class Cell {
     public void setRow(int row) {
         this.row = row;
     }
+
+    public Cell clone(){
+        Cell cell = new Cell(this.row,this.col);
+        cell.cellState = this.cellState;
+        cell.player = this.player;
+        return cell;
+    }
 }

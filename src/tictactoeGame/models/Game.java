@@ -2,6 +2,7 @@ package tictactoeGame.models;
 
 import tictactoeGame.exceptions.InvalidBoardSizeException;
 import tictactoeGame.exceptions.InvalidNoOfPlayersException;
+import tictactoeGame.services.CheckWinnerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,9 @@ public class Game {
     private Player winner;
     private List<Move> moves;
     private List<Board> playedBoards;
+    private CheckWinnerUtil checkWinnerUtil;
 
-    private Game(Board board, List<Player> players) {
+    private Game(Board board, List<Player> players,CheckWinnerUtil checkWinnerUtil) {
         this.board = board;
         this.players = players;
         this.gameState = GameState.YET_TO_START;
@@ -23,6 +25,15 @@ public class Game {
         //this.winner = winner;
         this.moves = new ArrayList<>();
         this.playedBoards = new ArrayList<>();
+        this.checkWinnerUtil = checkWinnerUtil;
+    }
+
+    public int getNextMovePlayerIndex() {
+        return nextMovePlayerIndex;
+    }
+
+    public void setNextMovePlayerIndex(int nextMovePlayerIndex) {
+        this.nextMovePlayerIndex = nextMovePlayerIndex;
     }
 
     public GameState getGameState() {
@@ -33,12 +44,52 @@ public class Game {
         this.gameState = gameState;
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public List<Player> getPlayers() {
         return players;
     }
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public List<Move> getMoves() {
+        return moves;
+    }
+
+    public void setMoves(List<Move> moves) {
+        this.moves = moves;
+    }
+
+    public List<Board> getPlayedBoards() {
+        return playedBoards;
+    }
+
+    public void setPlayedBoards(List<Board> playedBoards) {
+        this.playedBoards = playedBoards;
+    }
+
+    public CheckWinnerUtil getCheckWinnerUtil() {
+        return checkWinnerUtil;
+    }
+
+    public void setCheckWinnerUtil(CheckWinnerUtil checkWinnerUtil) {
+        this.checkWinnerUtil = checkWinnerUtil;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
     }
 
     public static Builder builder(){
@@ -48,6 +99,7 @@ public class Game {
     public static class Builder{
         private int size;
         private List<Player> players;
+        private CheckWinnerUtil checkWinnerUtil;
 
         public Builder size(int size) {
             this.size = size;
@@ -56,6 +108,10 @@ public class Game {
 
         public Builder players(List<Player> players) {
             this.players = players;
+            return this;
+        }
+        public Builder checkWinnerUtil(CheckWinnerUtil checkWinnerUtil) {
+            this.checkWinnerUtil = checkWinnerUtil;
             return this;
         }
 
@@ -74,7 +130,7 @@ public class Game {
         public Game build(){
             validate();
             Board gameBoard = new Board(size);
-            return new Game(gameBoard,players);
+            return new Game(gameBoard,players,checkWinnerUtil);
         }
     }
 }
