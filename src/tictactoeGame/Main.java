@@ -2,10 +2,7 @@ package tictactoeGame;
 
 import tictactoeGame.controller.GameController;
 import tictactoeGame.exceptions.GameDrawnException;
-import tictactoeGame.models.Game;
-import tictactoeGame.models.GameState;
-import tictactoeGame.models.Move;
-import tictactoeGame.models.Player;
+import tictactoeGame.models.*;
 import tictactoeGame.services.BoardService;
 import tictactoeGame.services.GameService;
 import tictactoeGame.services.PlayerService;
@@ -18,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
         BoardService boardService = new BoardService();
         PlayerService playerService = new PlayerService();
-        GameService gameService = new GameService();
+        GameService gameService = new GameService(boardService);
         GameController gameController = new GameController(playerService, gameService);
 
             System.out.println("WELCOME TO TICTACTOE GAME");
@@ -33,6 +30,15 @@ public class Main {
                 int nextPlayerIndex = game.getNextMovePlayerIndex();
                 Player currentplayer = game.getPlayers().get(nextPlayerIndex);
                 System.out.println("Player to make a move: " + currentplayer.getName());
+                if(!currentplayer.getPlayerType().equals(PlayerType.BOT)) {
+                    System.out.println("Do you want to undo to  certain step ? 1 for Yes, 0 for No");
+                    int undo = sc.nextInt();
+                    if (undo == 1) {
+                        System.out.println("Please enter the no of steps you want to go back :");
+                        int undoCount = sc.nextInt();
+                        game = gameController.undoGame(undoCount, game);
+                    }
+                }
                 Move move = gameController.createMove(currentplayer, game);
                 boardService.printBoard(game.getBoard());
                 try {
@@ -40,6 +46,11 @@ public class Main {
                     if (winner != null) {
                         game.setGameState(GameState.WINNER_DONE);
                         System.out.println("Winner is :" + winner.getName());
+                        System.out.println("Do you want a replay ? 1 for Yes, 0 for No");
+                        int replay = sc.nextInt();
+                        if(replay==1){
+                            gameController.replay(game);
+                        }
                         break;
                     }
                 }catch (GameDrawnException ex){

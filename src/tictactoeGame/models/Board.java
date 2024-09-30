@@ -37,7 +37,7 @@ public class Board {
         Board board = new Board(this.size);
         for(int i=0;i<size;i++){
             for(int j=0;j<size;j++){
-                board.getCells().get(i).add(j,this.cells.get(i).get(j).clone());
+                board.getCells().get(i).set(j,this.cells.get(i).get(j).clone());
             }
         }
         return board;

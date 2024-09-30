@@ -1,6 +1,7 @@
 package tictactoeGame.controller;
 
 import tictactoeGame.exceptions.InvalidCellChosenException;
+import tictactoeGame.exceptions.InvalidUndoCommandException;
 import tictactoeGame.models.*;
 import tictactoeGame.services.CheckWinnerUtil;
 import tictactoeGame.services.GameService;
@@ -63,6 +64,17 @@ public class GameController {
         }
         public Player checkWinner(Board board, Move move, CheckWinnerUtil checkWinnerUtil){
             return checkWinnerUtil.checkWinner(board,move);
+        }
+
+        public Game undoGame(int moves,Game game){
+            if(moves>game.getMoves().size()){
+                throw new InvalidUndoCommandException("Number of undo steps is invalid");
+            }
+            return gameService.undoMove(moves,game);
+        }
+
+        public void replay(Game game){
+            gameService.replay(game);
         }
     }
 

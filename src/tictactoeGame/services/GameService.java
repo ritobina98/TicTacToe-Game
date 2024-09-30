@@ -8,6 +8,11 @@ import java.util.List;
 
 public class GameService {
 
+    private BoardService boardService;
+
+    public GameService(BoardService boardService) {
+        this.boardService = boardService;
+    }
 
     public Game createGame(int size, List<Player> players){
         CheckWinnerUtil checkWinnerUtil = new CheckWinnerUtil(size);
@@ -36,5 +41,26 @@ public class GameService {
         game.getMoves().add(move);
         game.getPlayedBoards().add(game.getBoard().clone());
         return move;
+    }
+
+    public Game undoMove(int undoCount, Game game){
+        List<Board> playedBoards = game.getPlayedBoards();
+        List<Move> moveList = game.getMoves();
+        int movesPlayed = moveList.size();
+        moveList = moveList.subList(0,movesPlayed - undoCount);
+        playedBoards = playedBoards.subList(0, movesPlayed - undoCount);
+        game.setBoard(playedBoards.getLast());
+        //game.setMoves(moveList);
+        //System.out.println("printing test board");
+        //boardService.printBoard(game.getBoard());
+        return game;
+    }
+
+    public void replay(Game game){
+        List<Board> playedBoards = game.getPlayedBoards();
+        for(Board board : playedBoards){
+            boardService.printBoard(board);
+            System.out.println("-------------------------");
+        }
     }
 }
